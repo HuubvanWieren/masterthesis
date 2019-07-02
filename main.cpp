@@ -1,69 +1,91 @@
 #include "IPv4Layer.h"
-
 #include "Packet.h"
-
 #include "PcapFileDevice.h"
+#include "fstream"
+#include <vector>
+#include <iterator>
+#include <iostream>
+#include <stdlib.h>
+#include <string>
 
-int main(int argc, char * argv[]) {
-  int i = 1;
-  int random[26];
+using namespace std;
 
-  srand((unsigned)time(NULL));
+//functions to get random element from vector (not used)
+int random_int(int min, int max)
+{
+    return rand() % (max - min + 1) + min;
+}
 
-  for (int i = 1; i < 26; i++)
-  {
-	random[i] = 1+ rand() % 10;
-  }
-  i = 0;
- 
-  pcpp::PcapFileWriterDevice pcapWriter("output.pcap", pcpp::LINKTYPE_ETHERNET);
+//template<class int>
+int random_element(std::vector<int>& elements)
+{
+    return elements[random_int(0, elements.size() - 1)];
+}
 
-  // try to open the file for writing
-  if (!pcapWriter.open()) {
-    printf("Cannot open output.pcap for writing\n");
-    exit(1);
-  }
+int main(int argc, char *argv[])
+{
+	//get percentage argument
+	int f = atof(argv[1]);
+    int i = 1;
+	
+	std::string textfilename = ".txt";
+	textfilename.insert(0,argv[1]);
+	
+    //load corrent "file.txt" and uint32 IP addresses in a vector
+    using isii = std::istream_iterator<int>;
+    std::ifstream in{ textfilename};
+    std::vector<int> ints{ isii{ in }, isii{} };
+	
+	int attacksize = ints.size();
+	
+	// can be used to print vector with ips:
+    //for (int i=0; i<ints.size();i++){
+    //	std::cout << ints.at(i) << ' ';
+    //}
 
-  // open a pcap file for reading
-  pcpp::PcapFileReaderDevice reader("output2.pcap");
-  if (!reader.open()) {
-    printf("Error opening the pcap file\n");
-    exit(1);
-  }
+	std::string outputname = "normal.pcap";
+	outputname.insert(6,argv[1]);
+	//std::cout << "Follow this command: " << outputname;
+	
+    pcpp::PcapFileWriterDevice pcapWriter(outputname.c_str(), pcpp::LINKTYPE_ETHERNET);
 
-  pcpp::RawPacket rawPacket;
-  while (reader.getNextPacket(rawPacket)) {
-    i += 1;
-    i = i%25;
-
-    //printf("Couldn't read the first packet in the file\n");
-    //return 1;
-
-    //parse the raw packet into a parsed packet
-    pcpp::Packet parsedPacket( & rawPacket);
-
-    // verify the packet is IPv4
-    if (parsedPacket.isPacketOfType(pcpp::IPv4)) {
-
-      pcpp::IPv4Layer * ipLayer = parsedPacket.getLayerOfType < pcpp::IPv4Layer > ();
-      //printf("%s\n", ipLayer->getSrcIpAddress().toString().c_str());
-
-      if (random[i] > 7){
-      ipLayer->setSrcIpAddress(pcpp::IPv4Address(std::string("123.2.1.6")));
-      }
-
-      // extract source and dest IPs
-      //pcpp::IPv4Address srcIP = parsedPacket.getLayerOfType<pcpp::IPv4Layer>()->getSrcIpAddress();
-      //pcpp::IPv4Address destIP = parsedPacket.getLayerOfType<pcpp::IPv4Layer>()->getDstIpAddress();
-
-      // print source and dest IPs
-      //printf("Source IP is '%s'; Dest IP is '%s'\n", srcIP.toString().c_str(), destIP.toString().c_str());
-
-      pcapWriter.writePacket(rawPacket);
+    // try to open the file for writing
+    if (!pcapWriter.open()) {
+        printf("Cannot open output.pcap for writing\n");
+        exit(1);
     }
-  }
-  // close the file
-  reader.close();
-  printf("done");
-  return 0;
+
+    // open a pcap file for reading
+    pcpp::PcapFileReaderDevice reader("bigFlows.pcap");
+    if (!reader.open()) {
+        printf("Error opening the pcap file\n");
+        exit(1);
+    }
+    int i2;
+    pcpp::RawPacket rawPacket;
+    while (reader.getNextPacket(rawPacket)) {
+        i += 1;
+        i = i % 1000;
+
+        //parse the raw packet into a parsed packet
+        pcpp::Packet parsedPacket(&rawPacket);
+
+        // verify the packet is IPv4
+        if (parsedPacket.isPacketOfType(pcpp::IPv4)) {
+            pcpp::IPv4Layer* ipLayer = parsedPacket.getLayerOfType<pcpp::IPv4Layer>();
+            //ipLayer->setSrcIpAddress(pcpp::IPv4Address(std::string("123.2.1.6")));
+			srand(((unsigned)time(NULL))+i);
+			int r = random_int(0,100);
+            if (f > r) {
+                //ipLayer->setSrcIpAddress(pcpp::IPv4Address(random_element(ints)));
+                ipLayer->setSrcIpAddress(pcpp::IPv4Address(ints[i2]));
+                i2 += 1;
+                i2 = i2 % attacksize;
+            }
+            pcapWriter.writePacket(rawPacket);
+        }
+    }
+    // close the file
+    reader.close();
+    return 0;
 }
