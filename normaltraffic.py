@@ -4,10 +4,10 @@ import os
 import json
 import random
 import Utils
+import subprocess
 
 def generatePcap(attackkey, overlap):
 	#opening signature
-	print("signatures/" + attackkey + ".json")
 	try:
 		f = open("signatures/" + attackkey + ".json", 'r')
 		fp = json.loads(f.read())
@@ -30,6 +30,15 @@ def generatePcaps(attackkey, overlap_set):
 		generatePcap("968117c31b16d683deae5f5ec641c88f", overlap)
 
 if __name__ == '__main__':
-	overlap_set = [10,20,31,40,50,60,70,80,90,100]
+	overlap_set = [77,83,85]
 	generatePcaps("968117c31b16d683deae5f5ec641c88f", overlap_set)
 	
+	subprocess.call(["make","-C","normal_pcaps","-f","makefile","all"])
+	
+	
+	for n in overlap_set:
+		subprocess.call(["./generate",str(n)],cwd="normal_pcaps")
+		subprocess.call(["rm", str(n)+".txt"],cwd="normal_pcaps")
+		
+
+	subprocess.call(["make","-C","normal_pcaps","-f","makefile","clean"])

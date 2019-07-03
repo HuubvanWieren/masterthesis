@@ -17,7 +17,7 @@ int random_int(int min, int max)
 }
 
 //template<class int>
-int random_element(std::vector<int>& elements)
+int random_element(std::vector<uint32_t>& elements)
 {
     return elements[random_int(0, elements.size() - 1)];
 }
