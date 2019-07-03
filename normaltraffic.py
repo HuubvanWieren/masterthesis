@@ -6,7 +6,7 @@ import random
 import Utils
 import subprocess
 
-def generatePcap(attackkey, overlap):
+def generateTxt(attackkey, overlap):
 	#opening signature
 	try:
 		f = open("signatures/" + attackkey + ".json", 'r')
@@ -15,7 +15,7 @@ def generatePcap(attackkey, overlap):
 		print("Opening signature failed")
 		return;
 	
-	#generate textfile with overlapping IPs
+	#generate textfile
 	ip_list = []
 	for item in fp['src_ips']:
 		ip_list.append(Utils.ip_to_uint32(item['ip']))
@@ -26,19 +26,23 @@ def generatePcap(attackkey, overlap):
 			f.write('%s\n' % ip)
 
 def generatePcaps(attackkey, overlap_set):
-	for overlap in overlap_set:
-		generatePcap("968117c31b16d683deae5f5ec641c88f", overlap)
-
-if __name__ == '__main__':
-	overlap_set = [77,83,85]
-	generatePcaps("968117c31b16d683deae5f5ec641c88f", overlap_set)
-	
 	subprocess.call(["make","-C","normal_pcaps","-f","makefile","all"])
-	
+	for overlap in overlap_set:
+		generateTxt(attackkey, overlap)
 	
 	for n in overlap_set:
-		subprocess.call(["./generate",str(n)],cwd="normal_pcaps")
-		subprocess.call(["rm", str(n)+".txt"],cwd="normal_pcaps")
+		subprocess.call(["./generate",str(n)],cwd="normal_pcaps") #call c++ program that generates pcap
+		subprocess.call(["rm", str(n)+".txt"],cwd="normal_pcaps") #remove the txt file
+	
+	subprocess.call(["make","-C","normal_pcaps","-f","makefile","clean"])
+if __name__ == '__main__':
+	overlap_set = [1,50,100]
+	generatePcaps("a877a80fc3e21a6f001c4d2f514ed993", overlap_set)
+	
+	
+	
+	
+
 		
 
-	subprocess.call(["make","-C","normal_pcaps","-f","makefile","clean"])
+	
