@@ -4,7 +4,7 @@ device=ens33
 
 
 echo "start"
-#sudo tcpreplay --loop 1000 --preload-pcap --mbps 10000 -i ${device} ddos2.pcap
-sudo tcpreplay --loop 1000 --preload-pcap -i ${device} ddos2.pcap
+sudo tcpreplay --topspeed --loop=1000 --limit 791615 --preload-pcap -i ${device} attack_pcaps/ddos.pcap &
+sudo tcpreplay --topspeed --loop=1000 --limit 791615 --preload-pcap -i ${device} normal_pcaps/normal50.pcap
 
 
