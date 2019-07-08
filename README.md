@@ -5,7 +5,7 @@ This repository contains all code used for my masterthesis. Research in progress
 ## Setup
 Ubuntu 18.04 LTS was used on all machines. Instructions are made for this OS.
 
-# Install to edit Pcap files with C++
+### Install to edit Pcap files with C++
 Download, extract and install PcapPlusPlus from [here](https://github.com/seladb/PcapPlusPlus/releases/tag/v19.04). ('pcapplusplus-19.04-ubuntu-18.04-gcc-7.tar.gz')
 
 libpcap-dev:
@@ -13,7 +13,7 @@ libpcap-dev:
 sudo apt-get install libpcap-dev
 ```
 
-# Install to to make and attach eBPF programs
+### Install to to make and attach eBPF programs
 BCC:
 ```bash
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4052245BD4284CDD
