@@ -76,12 +76,15 @@ int main(int argc, char *argv[])
         // verify the packet is IPv4
         if (parsedPacket.isPacketOfType(pcpp::IPv4)) {
             pcpp::IPv4Layer* ipLayer = parsedPacket.getLayerOfType<pcpp::IPv4Layer>();
-            //ipLayer->setSrcIpAddress(pcpp::IPv4Address(std::string("123.2.1.6")));
+//            ipLayer->setSrcIpAddress(pcpp::IPv4Address(std::string("123.2.1.6")));
+            pcpp::iphdr *iph = NULL;
+            iph = ipLayer->getIPv4Header();
+            iph->headerChecksum = 0xcdab;
 			srand(((unsigned)time(NULL))+i);
 			int r = random_int(0,100);
             if (f > r) {
                 //ipLayer->setSrcIpAddress(pcpp::IPv4Address(random_element(ints)));
-                ipLayer->setSrcIpAddress(pcpp::IPv4Address(ints[i2]));
+                ipLayer->setSrcIpAddress(pcpp::IPv4Address(ints[i2])); //assign new source IP address
                 i2 += 1;
                 i2 = i2 % attacksize;
             }
