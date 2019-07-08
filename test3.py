@@ -1,3 +1,4 @@
+#from bcc import BPF, table
 from bcc import BPF, table
 import socket
 import struct
@@ -11,11 +12,11 @@ import time
 import time
 import ipaddress
 
-device = "ens33"
+device = "enp0s31f6"
 src_file = 'test4.c'
 
 try:
-    f = open("signatures/" + "19655b0e20c74dcffa056a78cde7ee0f" + ".json", 'r')
+    f = open("signatures/" + "a877a80fc3e21a6f001c4d2f514ed993" + ".json", 'r')
     fp = json.loads(f.read())
 except:
     print("Opening signature failed")
@@ -82,8 +83,9 @@ while True:
     try:
         # for k, v in blacklist.items():
         #     if v[0] > 1:
+        time.sleep(5)
         value += 1
-                # print(k.value, " ", Utils.uint32_to_ip(k.value), ' ', v[0])
+       	        # print(k.value, " ", Utils.uint32_to_ip(k.value), ' ', v[0])
                 # flow.append([value, v[0].cntr, v[0].IPsrc, v[0].IPdst, v[0].proto, v[0].srcPort, v[0].dstPort, v[0].totl])#, v[0].totl, v[0].ttl])
                 # value += 1
     except KeyboardInterrupt:

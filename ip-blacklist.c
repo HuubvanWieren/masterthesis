@@ -8,21 +8,8 @@
 #include <linux/ipv6.h>
 #include <linux/tcp.h>
 
-struct packetFields {
-    uint32_t IPsrc;
-    uint32_t IPdst;
-//    uint32_t IPsrc;
-    uint16_t totl;
-//    uint8_t ttl;
-    uint8_t proto;
-    uint16_t srcPort;
-    uint16_t dstPort;
-    long cntr;
-};
-
 //BPG_PROG_ARRAY(progs, 1)
-BPF_TABLE_SHARED("percpu_hash", int, struct packetFields, packeth, 1);
-BPF_TABLE("percpu_hash", uint32_t, int, iplist, 2048);
+BPF_TABLE("percpu_hash", uint32_t, int, iplist, 524288);
 
 int xdp_prog(struct xdp_md *ctx) {
     void* data_end = (void*)(long)ctx->data_end;
@@ -50,7 +37,6 @@ int xdp_prog(struct xdp_md *ctx) {
     value = iplist.lookup(&(iph->saddr));
     if(value){
         *value += 1;
-        bpf_trace_printk("is dit pakket gedropt of niet?", value);
         return XDP_DROP;
     }
 
