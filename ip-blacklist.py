@@ -13,7 +13,7 @@ import time
 import ipaddress
 
 device = "enp0s31f6"
-src_file = 'ip-blacklist.c'
+src_file = 'eBPF_programs/ip-blacklist.c'
 
 try:
     f = open("signatures/" + "a877a80fc3e21a6f001c4d2f514ed993" + ".json", 'r')
