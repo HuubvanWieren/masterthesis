@@ -14,12 +14,12 @@ def generateDDoSPcap(destIP, attackkey):
         return
 
 
-def replayTraffic(overlap):
-    tcpreplaystring = "sudo tcpreplay --topspeed --loop=1000 --limit 791615 --preload-pcap -i ${device} attack_pcaps/ddos.pcap &"
-    tcpreplaystring2 = "sudo tcpreplay --topspeed --loop=1000 --limit 791615 --preload-pcap -i ${device} normal_pcaps/normal%s.pcap" % overlap
+def replayTraffic(device,overlap):
+    tcpreplaystring = "sudo tcpreplay --topspeed --loop=1000 --limit 791615 --preload-pcap -i %s attack_pcaps/ddos.pcap &" % device
+    tcpreplaystring2 = "sudo tcpreplay --topspeed --loop=1000 --limit 791615 --preload-pcap -i %s normal_pcaps/normal%s.pcap" % (device,overlap)
     subprocess.Popen(shlex.split(tcpreplaystring))
 
 
 if __name__ == '__main__':
     generateDDoSPcap("10.10.10.41","19655b0e20c74dcffa056a78cde7ee0f")
-    replayTraffic(50)
+    replayTraffic("ens33", 50)
