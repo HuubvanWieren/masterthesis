@@ -41,5 +41,5 @@ make
 sudo make install
 ```
 
-### TCPReplay
-Instructions can be found [here](https://tcpreplay.appneta.com/wiki/installation.html).
+### Tcpreplay
+Tcpreplay needs to be recompiled with netmap enabled. Instructions can be found [here](https://tcpreplay.appneta.com/wiki/installation.html).
