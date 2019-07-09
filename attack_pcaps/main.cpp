@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[])
 {
-	std::string outputname = "temp.pcap";
+	std::string outputname = "ddos.pcap";
 	
     pcpp::PcapFileWriterDevice pcapWriter(outputname.c_str(), pcpp::LINKTYPE_ETHERNET);
 
@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
             pcpp::iphdr *iph = NULL;
             iph = ipLayer->getIPv4Header();
             iph->headerChecksum = 0x3412;
+            iph->ipDst = 687865866;
             pcapWriter.writePacket(rawPacket);
         }
     }

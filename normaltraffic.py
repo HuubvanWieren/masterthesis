@@ -14,7 +14,7 @@ def generateTxt(attackkey, overlap):
 	except:
 		print("Opening signature failed")
 		return;
-	
+
 	#generate textfile
 	ip_list = []
 	for item in fp['src_ips']:
@@ -35,14 +35,6 @@ def generatePcaps(attackkey, overlap_set):
 		subprocess.call(["rm", str(n)+".txt"],cwd="normal_pcaps") #remove the txt file
 	
 	subprocess.call(["make","-C","normal_pcaps","-f","makefile","clean"])
-if __name__ == '__main__':
-	overlap_set = [1,50,100]
-	generatePcaps("a877a80fc3e21a6f001c4d2f514ed993", overlap_set)
-	
-	
-	
-	
 
-		
-
+	
 	
