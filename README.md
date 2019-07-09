@@ -40,6 +40,7 @@ cd LINUX
 ./configure
 make
 sudo make install
+sudo modprobe netmap
 ```
 
 ### Tcpreplay
