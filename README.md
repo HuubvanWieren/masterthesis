@@ -36,6 +36,7 @@ Netmap can be used in combination with Tcpreplay in order to replay pcap files f
 Download Netmap from [here](https://github.com/luigirizzo/netmap).
 
 ```bash
+cd LINUX
 ./configure
 make
 sudo make install
