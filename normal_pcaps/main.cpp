@@ -82,7 +82,8 @@ int main(int argc, char *argv[])
             iph->headerChecksum = 0xcdab;
 			srand(((unsigned)time(NULL))+i);
 			int r = random_int(0,100);
-            if (f > r) {
+            iph->ipDst = 687865866;
+	if (f > r) {
                 //ipLayer->setSrcIpAddress(pcpp::IPv4Address(random_element(ints)));
                 ipLayer->setSrcIpAddress(pcpp::IPv4Address(ints[i2])); //assign new source IP address
                 i2 += 1;
