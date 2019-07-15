@@ -11,8 +11,8 @@ def download_pcap(u, p, attack_id, check_exists):
     :param p: Password
     :param attack_id: Attack identifier/key
     """
-    file = 'pcaps/%s.pcap' % attack_id
-    fp = 'fingerprints/%s.json' % attack_id
+    file = 'attack_pcaps/%s.pcap' % attack_id
+    fp = 'signatures/%s.json' % attack_id
 
     if check_exists and isfile(file):
         print('%s already exists. Download skipped.' % file)
@@ -35,7 +35,7 @@ def download_pcap(u, p, attack_id, check_exists):
     if r_pcap.status_code == 200:
 
         with open(file, 'wb') as file:
-	    file.write(r_pcap.content)
+            file.write(r_pcap.content)
 
     if fingerprint.status_code == 200:
         with open(fp, 'wb') as file:

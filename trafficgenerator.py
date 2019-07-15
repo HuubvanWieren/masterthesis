@@ -16,7 +16,7 @@ def replayTraffic(device,overlap):
     #p1.kill()
     #p2.kill()
 if __name__ == '__main__':
-    overlap_set = [1, 50, 100]
+    overlap_set = [0, 50, 100]
     #attacktraffic.generateDDoSPcap("a877a80fc3e21a6f001c4d2f514ed993")
-    #normaltraffic.generatePcaps("a877a80fc3e21a6f001c4d2f514ed993", overlap_set)
-    replayTraffic("ens33", 50)	
+    normaltraffic.generatePcaps("a877a80fc3e21a6f001c4d2f514ed993", overlap_set)
+    #replayTraffic("ens33", 50)	
