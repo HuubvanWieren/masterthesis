@@ -25,8 +25,8 @@ int random_element(std::vector<uint32_t>& elements)
 int main(int argc, char *argv[])
 {
 	//get percentage argument
-	int f = atof(argv[1]);
-    int i = 1;
+	float f = atof(argv[1]);
+    float i = 0;
 	
 	std::string textfilename = ".txt";
 	textfilename.insert(0,argv[1]);
@@ -64,15 +64,16 @@ int main(int argc, char *argv[])
         exit(1);
     }
     int i2 = 0;
+	float count = 0;
+	int limit = 0;
+	float max = ((f/100)*791179);
+		
     pcpp::RawPacket rawPacket;
-	printf("%i\n",attacksize);
+	printf("# unique attack IPs: %i\n",attacksize);
+	printf("Max #IP to replace: %f\n", max);
     while (reader.getNextPacket(rawPacket)) {
-        i += 1;
-        i = i % 1000;
-
         //parse the raw packet into a parsed packet
         pcpp::Packet parsedPacket(&rawPacket);
-
         // verify the packet is IPv4
         if (parsedPacket.isPacketOfType(pcpp::IPv4)) {
             pcpp::IPv4Layer* ipLayer = parsedPacket.getLayerOfType<pcpp::IPv4Layer>();
@@ -80,14 +81,21 @@ int main(int argc, char *argv[])
             pcpp::iphdr *iph = NULL;
             iph = ipLayer->getIPv4Header();
             iph->headerChecksum = 0xcdab;
-			srand(((unsigned)time(NULL))+i);
+            ipLayer->setDstIpAddress(pcpp::IPv4Address(838860810));        //iph->ipDst = 838860810; //  704643082;//687865866;
+			i += 1;
+			srand(((unsigned)time(NULL))+(int) i);
 			int r = random_int(0,100);
-            iph->ipDst = 687865866;
-	if (f > r) {
+			if (((f >= r) && (limit == 0)) || (limit==-1)) {
                 //ipLayer->setSrcIpAddress(pcpp::IPv4Address(random_element(ints)));
                 ipLayer->setSrcIpAddress(pcpp::IPv4Address(ints[i2])); //assign new source IP address
                 i2 += 1;
                 i2 = i2 % attacksize;
+				count += 1;
+				if (count >= max) {
+					limit = 1;
+				} else if ((i > 790000) && ((count/i) < (f/100)) ) {
+					limit = -1;
+				}
             }
             pcapWriter.writePacket(rawPacket);
         }
