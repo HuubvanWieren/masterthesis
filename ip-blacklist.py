@@ -1,4 +1,3 @@
-
 from bcc import BPF, table
 import socket
 import struct
@@ -12,7 +11,7 @@ import time
 import time
 import ipaddress
 
-device = "enp0s31f6"
+device = "enx503eaa208d37"
 src_file = 'eBPF_programs/ip-blacklist.c'
 
 try:

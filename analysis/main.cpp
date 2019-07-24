@@ -40,7 +40,22 @@ int main(int argc, char *argv[])
 	}
 	// close the file
 	reader.close();
+	int tp = 1582358 - fn;
+	int fp = 1582358 - tn;
+	
 	cout << "True negatives: " << tn << "\n";
+    cout << "True positives: " << tp << "\n";
+    cout << "False positives: " << fp << "\n";
 	cout << "False negatives: " << fn << "\n";
+	
+	float tpr = (float) tp / 1582358;
+	float fpr = (float) fp / 1582358;
+	float tnr = (float) tn / 1582358;
+	float fnr = (float) fn / 1582358;
+	
+	cout << "True negative rate: " << tnr << "\n";
+    cout << "True positive rate: " << tpr << "\n";
+    cout << "False positives rate: " << fpr << "\n";
+	cout << "False negatives rate: " << fnr << "\n";
 	return 0;
 }
