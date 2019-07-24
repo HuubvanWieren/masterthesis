@@ -3,6 +3,7 @@ import subprocess
 import shlex
 import os
 import time
+import sys
 
 #a877a80fc3e21a6f001c4d2f514ed993
 
@@ -20,6 +21,4 @@ def replayTraffic(device,overlap):
     p2.kill()
 
 if __name__ == '__main__':
-    overlap_set = [0, 76, 100]
-    preparepcaps.generateAllPcaps(attackkey, overlap_set)
-    replayTraffic("enp0s31f6", 100)
+    replayTraffic("enp0s31f6", int(sys.argv[1]))
