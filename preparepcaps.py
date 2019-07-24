@@ -5,6 +5,7 @@ import json
 import random
 import Utils
 import subprocess
+import shlex
 
 def generateTxt(attackkey, overlap):
 	#opening signature
@@ -25,16 +26,26 @@ def generateTxt(attackkey, overlap):
 		for ip in resultList:
 			f.write('%s\n' % ip)
 
-def generatePcaps(attackkey, overlap_set):
-	subprocess.call(["make","-C","normal_pcaps","-f","makefile","all"])
+def generateNormalPcaps(attackkey, overlap_set):
+	subprocess.call(shlex.split("make -C normal_pcaps -f makefile all"))
 	for overlap in overlap_set:
 		generateTxt(attackkey, overlap)
-	
+
 	for n in overlap_set:
 		subprocess.call(["./generate",str(n)],cwd="normal_pcaps") #call c++ program that generates pcap
 		subprocess.call(["rm", str(n)+".txt"],cwd="normal_pcaps") #remove the txt file
-	
-	subprocess.call(["make","-C","normal_pcaps","-f","makefile","clean"])
 
+	subprocess.call(shlex.split("make -C normal_pcaps -f makefile clean"))
+
+def generateAttackPcap(attackkey):
+	subprocess.call(shlex.split("make -C attack_pcaps -f makefile all"))
+	subprocess.call(["./generate",attackkey+".pcap"],cwd="attack_pcaps")
+	subprocess.call(shlex.split("make -C attack_pcaps -f makefile clean"))
+	
+def generateAllPcaps(attackkey, overlap_set):
+	generateNormalPcaps(attackkey, overlap_set)
+	generateAttackPcap(attackkey)
+
+	
 	
 	
