@@ -67,8 +67,7 @@ int main(int argc, char *argv[])
 	float count = 0;
 	int limit = 0;
 	float max = ((f/100)*791179);
-		
-    pcpp::RawPacket rawPacket;
+	pcpp::RawPacket rawPacket;
 	printf("# unique attack IPs: %i\n",attacksize);
 	printf("Max #IP to replace: %f\n", max);
     while (reader.getNextPacket(rawPacket)) {
@@ -85,7 +84,7 @@ int main(int argc, char *argv[])
 			i += 1;
 			srand(((unsigned)time(NULL))+(int) i);
 			int r = random_int(0,100);
-			if (((f >= r) && (limit == 0)) || (limit==-1)) {
+			if (((f >= r) && (limit == 0) && (f!=0)) || (limit==-1)) {
                 //ipLayer->setSrcIpAddress(pcpp::IPv4Address(random_element(ints)));
                 ipLayer->setSrcIpAddress(pcpp::IPv4Address(ints[i2])); //assign new source IP address
                 i2 += 1;

@@ -9,9 +9,10 @@ import sys
 
 attackkey = "a877a80fc3e21a6f001c4d2f514ed993" # "955a5cd15843aa5c4155fd3f69651e15"  # "955a5cd15843aa5c4155fd3f69651e15"
 #--loop 1000 --limit 791615
+
 def replayTraffic(device,overlap):
-    tcpreplaystring = "sudo tcpreplay --loop 1000 --limit 1582358 -p 150000 --preload-pcap -i %s attack_pcaps/ddos.pcap" % device
-    tcpreplaystring2 = "sudo tcpreplay --loop 1000 --limit 1582358 -p 150000 --preload-pcap -i %s normal_pcaps/normal%s.pcap" % (device,overlap)
+    tcpreplaystring = "sudo tcpreplay --loop 1000 --limit 1582358 -p 100000 --preload-pcap -i %s attack_pcaps/ddos.pcap" % device
+    tcpreplaystring2 = "sudo tcpreplay --loop 1000 --limit 1582358 -p 100000 --preload-pcap -i %s normal_pcaps/normal%s.pcap" % (device,overlap)
     p1 = subprocess.Popen(shlex.split(tcpreplaystring))
     p2 = subprocess.Popen(shlex.split(tcpreplaystring2))
 
@@ -21,4 +22,5 @@ def replayTraffic(device,overlap):
     p2.kill()
 
 if __name__ == '__main__':
-    replayTraffic("enp0s31f6", int(sys.argv[1]))
+	#replayTraffic("enp0s31f6", 100)
+	replayTraffic("enp0s31f6", int(sys.argv[1]))
