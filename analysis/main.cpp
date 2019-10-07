@@ -13,11 +13,15 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 	// open a pcap file for reading
-	pcpp::PcapFileReaderDevice reader("analysis/packetsreceived.pcap");
+	pcpp::PcapFileReaderDevice reader(argv[1]);
 	if (!reader.open()) {
 		printf("Error opening the pcap file\n");
 		exit(1);
 	}
+	
+	int overlap = atoi(argv[2]);
+	std::string attackkey = argv[3];
+	
 	int tn = 0;
 	int fn = 0;
 	pcpp::RawPacket rawPacket;
@@ -40,6 +44,12 @@ int main(int argc, char *argv[])
 	}
 	// close the file
 	reader.close();
+	
+	std::ofstream myfile;
+    myfile.open ("results.csv", std::ios_base::app);
+	
+	int total = tn+fn;
+	cout << "Total packets: " << total << "\n";
 	int tp = 1582358 - fn;
 	int fp = 1582358 - tn;
 	
@@ -57,5 +67,8 @@ int main(int argc, char *argv[])
     cout << "True positive rate: " << tpr << "\n";
     cout << "False positives rate: " << fpr << "\n";
 	cout << "False negatives rate: " << fnr << "\n";
+	
+	myfile << attackkey << "," << overlap << "," << total << "," << tp << "," << fp << "," << tn << "," << fn << "\n";
+	myfile.close();
 	return 0;
 }

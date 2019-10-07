@@ -8,14 +8,13 @@ import os
 # from ctypes import *
 from datetime import datetime
 import time
-import time
 import ipaddress
 
 device = "enx503eaa208d37"
 src_file = 'eBPF_programs/ip-blacklist.c'
 
 try:
-    f = open("signatures/" + "a877a80fc3e21a6f001c4d2f514ed993" + ".json", 'r')
+    f = open("signatures/" + "41fd4b0156a33263722ee03c74e238a4" + ".json", 'r')
     fp = json.loads(f.read())
 except:
     print("Opening signature failed")
