@@ -9,7 +9,7 @@
 #include <linux/tcp.h>
 
 //BPG_PROG_ARRAY(progs, 1)
-BPF_TABLE("percpu_hash", uint32_t, int, iplist, 524288);
+BPF_TABLE("percpu_hash", uint32_t, uint16_t, iplist, 6524288);
 
 int xdp_prog(struct xdp_md *ctx) {
     void* data_end = (void*)(long)ctx->data_end;
@@ -22,15 +22,15 @@ int xdp_prog(struct xdp_md *ctx) {
     uint64_t offset = sizeof(*ethh);
 
     if (data + offset > data_end)
-        return XDP_DROP;
+        return XDP_PASS;
 
     if(ethh->h_proto != htons(ETH_P_IP)){
-        return XDP_DROP;
+        return XDP_PASS;
     }
 
     iph = data + offset;
     if ((void*)&iph[1] > data_end)
-        return XDP_DROP;
+        return XDP_PASS;
     offset += iph->ihl*4;
 
     int *value;
